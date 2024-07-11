@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "cliente-app-coffeeshop",
+    "slug": "cliente-app-coffeeshop",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/coffee-cup.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/coffeeshop-splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#EAD8C0"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],        
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/coffee-cup-splash.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/coffee-cup.png"
+    }
+  }
+}
