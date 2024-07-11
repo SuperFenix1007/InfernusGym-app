@@ -16,7 +16,7 @@ export default function ProductoCard({ ip, imagenProducto, idProducto, nombrePro
     <View style={styles.card}>
       <View style={styles.imageContainer}>
         <Image
-          source={{ uri: `${ip}/coffeeshop/api/images/productos/${imagenProducto}` }}
+          source={{ uri: `${ip}/gym_infernus_website/api/images/productos/${imagenProducto}` }}
           style={styles.image}
           resizeMode="contain" // Ajustar la imagen al contenedor
         />

@@ -42,7 +42,7 @@ export default function Productos({ navigation }) {
       const formData = new FormData();
       formData.append('idCategoria', idCategoriaSelect);
       //utilizar la direccion IP del servidor y no localhost
-      const response = await fetch(`${ip}/coffeeshop/api/services/public/producto.php?action=readProductosCategoria`, {
+      const response = await fetch(`${ip}/gym_infernus_website/api/services/public/producto.php?action=readProductosCategoria`, {
         method: 'POST',
         body: formData
       });
@@ -67,7 +67,7 @@ export default function Productos({ navigation }) {
     try {
 
       //utilizar la direccion IP del servidor y no localhost
-      const response = await fetch(`${ip}/coffeeshop/api/services/public/categoria.php?action=readAll`, {
+      const response = await fetch(`${ip}/gym_infernus_website/api/services/public/categoria.php?action=readAll`, {
         method: 'GET',
       });
 
@@ -126,7 +126,7 @@ export default function Productos({ navigation }) {
             placeholder={{ label: 'Selecciona una categoría...', value: null }}
             items={dataCategorias.map(categoria => ({
               label: categoria.nombre_categoria,
-              value: categoria.id_categoria,
+              value: categoria.categoria_id,
             }))}
           />
         </View>
@@ -134,16 +134,16 @@ export default function Productos({ navigation }) {
       <SafeAreaView style={styles.containerFlat}>
         <FlatList
           data={dataProductos}
-          keyExtractor={(item) => item.id_producto}
+          keyExtractor={(item) => item.producto_id}
           renderItem={({ item }) => ( // Util izamos destructuración para obtener directamente el item
             <ProductoCard ip={ip}
               imagenProducto={item.imagen_producto}
-              idProducto={item.id_producto}
+              idProducto={item.producto_id}
               nombreProducto={item.nombre_producto}
               descripcionProducto={item.descripcion_producto}
               precioProducto={item.precio_producto}
               existenciasProducto={item.existencias_producto}
-              accionBotonProducto={() => handleCompra(item.nombre_producto, item.id_producto)}
+              accionBotonProducto={() => handleCompra(item.nombre_producto, item.producto_id)}
             />
           )}
         />

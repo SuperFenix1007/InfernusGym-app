@@ -19,7 +19,7 @@ const ModalCompra = ({ visible, cerrarModal, nombreProductoModal, idProductoModa
             formData.append('idProducto', idProductoModal);
             formData.append('cantidadProducto', cantidad);
 
-            const response = await fetch(`${ip}/coffeeshop/api/services/public/pedido.php?action=createDetail`, {
+            const response = await fetch(`${ip}/gym_infernus_website/api/services/public/pedido.php?action=createDetail`, {
                 method: 'POST',
                 body: formData
             });
