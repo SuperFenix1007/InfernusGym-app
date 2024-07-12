@@ -121,7 +121,7 @@ export default function SignUp({ navigation }) {
             formData.append('correoCliente', email);
             formData.append('direccionCliente', direccion);
             formData.append('duiCliente', dui);
-            formData.append('nacimientoCliente', fechaNacimiento);
+            formData.append('fechaNacimientoCliente', fechaNacimiento);
             formData.append('telefonoCliente', telefono);
             formData.append('claveCliente', clave);
             formData.append('confirmarClave', confirmarClave);
