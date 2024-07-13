@@ -1,2 +1,1 @@
-# InfernusGym-app
-repositorio nuevo de la app de InfernusGymShop en android studio, de nuevo para hacerla debido a errores
+Aplicacion desarrollada por César Andrés López Valdez Atribución-NoComercial-CompartirIgual (CC BY-NC-SA) dependencias instaladas: @babel/core@7.24.7 ├── @react-native-async-storage/async-storage@1.23.1 ├── @react-native-community/masked-view@0.1.11 ├── @react-navigation/drawer@6.6.15 ├── @react-navigation/native@6.1.17 ├── @react-navigation/stack@6.3.29 ├── expo-status-bar@1.12.1 ├── expo@51.0.18 ├── react-native-gesture-handler@2.16.2 ├── react-native-reanimated@3.10.1 ├── react-native-safe-area-context@4.10.7 ├── react-native-screens@3.31.1 ├── react-native@0.74.3 └── react@18.2.0
