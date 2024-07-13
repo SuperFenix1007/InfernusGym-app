@@ -1,4 +1,3 @@
-
 import { StatusBar, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, FlatList, ScrollView, SafeAreaView, Image, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
 import * as Constantes from '../utils/constantes'
@@ -21,9 +20,7 @@ export default function Productos({ navigation }) {
   const [nombreProductoModal, setNombreProductoModal] = useState('')
 
   const volverInicio = async () => {
-
     navigation.navigate('Home');
-
   };
 
   const handleCompra = (nombre, id) => {
@@ -35,7 +32,7 @@ export default function Productos({ navigation }) {
   //getCategorias Funcion para consultar por medio de una peticion GET los datos de la tabla categoria que se encuentran en la base de datos
   const getProductos = async (idCategoriaSelect = 1) => {
     try {
-      if (idCategoriaSelect <= 0) //validar que vaya seleccionada una categoria de productos
+      if (idCategoriaSelect <= 0) 
       {
         return
       }
@@ -65,7 +62,6 @@ export default function Productos({ navigation }) {
 
   const getCategorias = async () => {
     try {
-
       //utilizar la direccion IP del servidor y no localhost
       const response = await fetch(`${ip}/gym_infernus_website/api/services/public/categoria.php?action=readAll`, {
         method: 'GET',
@@ -99,68 +95,97 @@ export default function Productos({ navigation }) {
     navigation.navigate('Carrito')
   }
 
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Catalogo de Productos</Text>
-      <Buttons
-        textoBoton='Volver a Home'
-        accionBoton={volverInicio}
-      />
-      <ModalCompra
-        visible={modalVisible}
-        cerrarModal={setModalVisible}
-        nombreProductoModal={nombreProductoModal}
-        idProductoModal={idProductoModal}
-        cantidad={cantidad}
-        setCantidad={setCantidad}
-      />
-      <View>
-        <Text style={styles.subtitle}>
-          Selecciona una categoria para filtar productos
-        </Text>
-        <View style={styles.pickerContainer}>
-          <RNPickerSelect
-            style={{ inputAndroid: styles.picker }}
-            onValueChange={(value) => getProductos(value)}
-            placeholder={{ label: 'Selecciona una categoría...', value: null }}
-            items={dataCategorias.map(categoria => ({
-              label: categoria.nombre_categoria,
-              value: categoria.categoria_id,
-            }))}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={volverInicio} style={styles.backButton}>
+          <FontAwesome name="arrow-left" size={24} color="white" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Catalogo de Productos</Text>
+        <TouchableOpacity onPress={() => {}} style={styles.menuButton}>
+          <FontAwesome name="bars" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+      <ScrollView>
+        <ModalCompra
+          visible={modalVisible}
+          cerrarModal={setModalVisible}
+          nombreProductoModal={nombreProductoModal}
+          idProductoModal={idProductoModal}
+          cantidad={cantidad}
+          setCantidad={setCantidad}
+        />
+        <View>
+          <Text style={styles.subtitle}>
+            Selecciona una categoria para filtar productos
+          </Text>
+          <View style={styles.pickerContainer}>
+            <RNPickerSelect
+              style={{ inputAndroid: styles.picker }}
+              onValueChange={(value) => getProductos(value)}
+              placeholder={{ label: 'Selecciona una categoría...', value: null }}
+              items={dataCategorias.map(categoria => ({
+                label: categoria.nombre_categoria,
+                value: categoria.categoria_id,
+              }))}
+            />
+          </View>
+        </View>
+        <SafeAreaView style={styles.containerFlat}>
+          <FlatList
+            data={dataProductos}
+            keyExtractor={(item) => item.producto_id}
+            renderItem={({ item }) => (
+              <ProductoCard
+                ip={ip}
+                imagenProducto={item.imagen_producto}
+                idProducto={item.producto_id}
+                nombreProducto={item.nombre_producto}
+                descripcionProducto={item.descripcion_producto}
+                precioProducto={item.precio_producto}
+                existenciasProducto={item.existencias_producto}
+                accionBotonProducto={() => handleCompra(item.nombre_producto, item.producto_id)}
+              />
+            )}
           />
+        </SafeAreaView>
+      </ScrollView>
+      <View style={styles.footer}>
+        <TouchableOpacity
+          style={styles.cartButton}
+          onPress={irCarrito}>
+          <FontAwesome name="shopping-cart" size={24} color="white" />
+          <Text style={styles.cartButtonText}>Ir al carrito</Text>
+        </TouchableOpacity>
+        <View style={styles.pagination}>
+          <Text style={styles.pageButton}>Previous</Text>
+          <Text style={styles.pageButton}>1</Text>
+          <Text style={styles.pageButton}>2</Text>
+          <Text style={styles.pageButton}>3</Text>
+          <Text style={styles.pageButton}>4</Text>
+          <Text style={styles.pageButton}>5</Text>
+          <Text style={styles.pageButton}>Next</Text>
         </View>
       </View>
-      <SafeAreaView style={styles.containerFlat}>
-        <FlatList
-          data={dataProductos}
-          keyExtractor={(item) => item.producto_id}
-          renderItem={({ item }) => ( // Util izamos destructuración para obtener directamente el item
-            <ProductoCard ip={ip}
-              imagenProducto={item.imagen_producto}
-              idProducto={item.producto_id}
-              nombreProducto={item.nombre_producto}
-              descripcionProducto={item.descripcion_producto}
-              precioProducto={item.precio_producto}
-              existenciasProducto={item.existencias_producto}
-              accionBotonProducto={() => handleCompra(item.nombre_producto, item.producto_id)}
-            />
-          )}
-        />
-      </SafeAreaView>
-
-      <TouchableOpacity
-        style={styles.cartButton}
-        onPress={irCarrito}>
-        <FontAwesome name="shopping-cart" size={24} color="white" />
-        <Text style={styles.cartButtonText}>Ir al carrito</Text>
-      </TouchableOpacity>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#AF8260',
+    padding: 10,
+    width: '100%',
+  },
+  backButton: {
+    padding: 10,
+  },
+  menuButton: {
+    padding: 10,
+  },
   containerFlat: {
     flex: 1,
     paddingTop: Constants.statusBarHeight,
@@ -238,7 +263,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 16,
-    color: '#5C3D2E',
+    color: '#ffffff',
   },
   cartButton: {
     flexDirection: 'row',
@@ -260,18 +285,36 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginVertical: 5,
     marginHorizontal: 5,
-    color: '#5C3D2E', // Brown color for the title
+    color: '#5C3D2E', 
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: '#AF8260', // Color del borde
+    borderColor: '#AF8260', 
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 5,
     marginBottom: 10,
-    backgroundColor: '#AF8260', // Color de fondo
+    backgroundColor: '#AF8260', 
   },
   picker: {
     color: '#ffffff'
   },
+  footer: {
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: 20,
+    backgroundColor: '#F4E4D9',
+  },
+  pagination: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 10,
+  },
+  pageButton: {
+    marginHorizontal: 5,
+    padding: 10,
+    backgroundColor: '#AF8260',
+    color: '#ffffff',
+    borderRadius: 5,
+  }
 });

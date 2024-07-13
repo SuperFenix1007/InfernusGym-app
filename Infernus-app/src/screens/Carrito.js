@@ -1,11 +1,7 @@
 // Importaciones necesarias
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, FlatList, Alert } from 'react-native';
-
+import { Text, View, StyleSheet, FlatList, Alert, TouchableOpacity, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-// Importa la función useFocusEffect de @react-navigation/native, 
-// que permite ejecutar un efecto cada vez que la pantalla se enfoca.
-
 import Constants from 'expo-constants';
 import * as Constantes from '../utils/constantes';
 import Buttons from '../components/Buttons/Button';
@@ -13,51 +9,39 @@ import CarritoCard from '../components/CarritoCard/CarritoCard';
 import ModalEditarCantidad from '../components/Modales/ModalEditarCantidad';
 
 const Carrito = ({ navigation }) => {
-  // Estado para almacenar los detalles del carrito
   const [dataDetalleCarrito, setDataDetalleCarrito] = useState([]);
-  // Estado para el id del detalle seleccionado para modificar
   const [idDetalle, setIdDetalle] = useState(null);
-  // Estado para la cantidad del producto seleccionado en el carrito
   const [cantidadProductoCarrito, setCantidadProductoCarrito] = useState(0);
-  // Estado para controlar la visibilidad del modal de edición de cantidad
   const [modalVisible, setModalVisible] = useState(false);
-  // IP del servidor
   const ip = Constantes.IP;
 
-  // Función para navegar hacia atrás a la pantalla de productos
   const backProducts = () => {
     navigation.navigate('Productos');
   };
 
-  // Efecto para cargar los detalles del carrito al cargar la pantalla o al enfocarse en ella
   useFocusEffect(
-    // La función useFocusEffect ejecuta un efecto cada vez que la pantalla se enfoca.
     React.useCallback(() => {
-      getDetalleCarrito(); // Llama a la función getDetalleCarrito.
+      getDetalleCarrito();
     }, [])
   );
 
-  // Función para obtener los detalles del carrito desde el servidor
   const getDetalleCarrito = async () => {
     try {
       const response = await fetch(`${ip}/gym_infernus_website/api/services/public/pedido.php?action=readDetail`, {
         method: 'GET',
       });
       const data = await response.json();
-      console.log(data, "Data desde getDetalleCarrito")
       if (data.status) {
         setDataDetalleCarrito(data.dataset);
       } else {
-        console.log("No hay detalles del carrito disponibles")
-        //Alert.alert('ADVERTENCIA', data.error);
+        console.log("No hay detalles del carrito disponibles");
       }
     } catch (error) {
-      console.error(error, "Error desde Catch");
+      console.error(error);
       Alert.alert('Error', 'Ocurrió un error al listar las categorias');
     }
   };
 
-  // Función para finalizar el pedido
   const finalizarPedido = async () => {
     try {
       const response = await fetch(`${ip}/gym_infernus_website/api/services/public/pedido.php?action=finishOrder`, {
@@ -65,8 +49,8 @@ const Carrito = ({ navigation }) => {
       });
       const data = await response.json();
       if (data.status) {
-        Alert.alert("Se finalizó la compra correctamente")
-        setDataDetalleCarrito([]); // Limpia la lista de detalles del carrito
+        Alert.alert("Se finalizó la compra correctamente");
+        setDataDetalleCarrito([]);
         navigation.navigate('TabNavigator', { screen: 'Productos' });
       } else {
         Alert.alert('Error', data.error);
@@ -76,14 +60,12 @@ const Carrito = ({ navigation }) => {
     }
   };
 
-  // Función para manejar la modificación de un detalle del carrito
   const handleEditarDetalle = (idDetalle, cantidadDetalle) => {
     setModalVisible(true);
     setIdDetalle(idDetalle);
     setCantidadProductoCarrito(cantidadDetalle);
   };
 
-  // Función para renderizar cada elemento del carrito
   const renderItem = ({ item }) => (
     <CarritoCard
       item={item}
@@ -96,13 +78,16 @@ const Carrito = ({ navigation }) => {
       setIdDetalle={setIdDetalle}
       accionBotonDetalle={handleEditarDetalle}
       getDetalleCarrito={getDetalleCarrito}
-      updateDataDetalleCarrito={setDataDetalleCarrito} // Nueva prop para actualizar la lista
+      updateDataDetalleCarrito={setDataDetalleCarrito}
     />
   );
 
+  const calcularTotal = () => {
+    return dataDetalleCarrito.reduce((total, item) => total + item.precio_producto * item.cantidad, 0);
+  };
+
   return (
     <View style={styles.container}>
-      {/* Componente de modal para editar cantidad */}
       <ModalEditarCantidad
         setModalVisible={setModalVisible}
         modalVisible={modalVisible}
@@ -113,10 +98,21 @@ const Carrito = ({ navigation }) => {
         getDetalleCarrito={getDetalleCarrito}
       />
 
-      {/* Título de la pantalla */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Image
+            source={{ uri: 'https://img.icons8.com/ios-filled/50/000000/menu.png' }}
+            style={styles.menuIcon}
+          />
+        </TouchableOpacity>
+        <Image
+          source={{ uri: 'https://img.icons8.com/ios-filled/100/000000/shopping-cart.png' }}
+          style={styles.cartIcon}
+        />
+      </View>
+
       <Text style={styles.title}>Carrito de Compras</Text>
 
-      {/* Lista de detalles del carrito */}
       {dataDetalleCarrito.length > 0 ? (
         <FlatList
           data={dataDetalleCarrito}
@@ -127,18 +123,21 @@ const Carrito = ({ navigation }) => {
         <Text style={styles.titleDetalle}>No hay detalles del carrito disponibles.</Text>
       )}
 
-      {/* Botones de finalizar pedido y regresar a productos */}
-      <View style={styles.containerButtons}>
-        {dataDetalleCarrito.length > 0 && (
-          <Buttons
-            textoBoton='Finalizar Pedido'
-            accionBoton={finalizarPedido}
-          />
-        )}
-        <Buttons
-          textoBoton='Regresar a productos'
-          accionBoton={backProducts}
+      <View style={styles.totalContainer}>
+        <Text style={styles.totalText}>Total Final</Text>
+        <Text style={styles.totalAmount}>{calcularTotal()}$</Text>
+      </View>
+
+      <TouchableOpacity style={styles.payButton} onPress={finalizarPedido}>
+        <Text style={styles.payButtonText}>Ir a pagar</Text>
+      </TouchableOpacity>
+
+      <View style={styles.footer}>
+        <Image
+          source={{ uri: 'https://img.icons8.com/ios-filled/100/000000/dumbbell.png' }}
+          style={styles.footerImage}
         />
+        <Text style={styles.footerText}>Infernus Gym Shop</Text>
       </View>
     </View>
   );
@@ -146,13 +145,28 @@ const Carrito = ({ navigation }) => {
 
 export default Carrito;
 
-// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#EAD8C0',
     paddingTop: Constants.statusBarHeight,
     paddingHorizontal: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: '#EAD8C0',
+  },
+  menuIcon: {
+    width: 24,
+    height: 24,
+  },
+  cartIcon: {
+    width: 48,
+    height: 48,
   },
   title: {
     fontSize: 24,
@@ -168,8 +182,53 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     color: '#5C3D2E',
   },
-  containerButtons: {
-    justifyContent: 'center',
+  totalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderTopWidth: 1,
+    borderColor: '#AF8260',
+    backgroundColor: '#F4E4D9',
+  },
+  totalText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#5C3D2E',
+  },
+  totalAmount: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#5C3D2E',
+  },
+  payButton: {
+    backgroundColor: '#AF8260',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     alignItems: 'center',
-  }
+    marginVertical: 10,
+  },
+  payButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  footer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    backgroundColor: '#F4E4D9',
+  },
+  footerImage: {
+    width: 48,
+    height: 48,
+  },
+  footerText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#5C3D2E',
+    marginTop: 8,
+  },
 });
+
+

@@ -1,25 +1,25 @@
 {
   "expo": {
-    "name": "cliente-app-coffeeshop",
-    "slug": "cliente-app-coffeeshop",
+    "name": "InfernusGym-app",
+    "slug": "InfernusGym-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/coffee-cup.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/coffeeshop-splash.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#EAD8C0"
     },
     "assetBundlePatterns": [
       "**/*"
-    ],        
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/coffee-cup-splash.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       }
     },

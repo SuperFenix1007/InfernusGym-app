@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, Alert, Image, ScrollView, TouchableOpacity } from 'react-native';
 import Buttons from '../components/Buttons/Button';
 import * as Constantes from '../utils/constantes';
 
@@ -52,68 +52,149 @@ export default function Home({ navigation }) {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={handleLogout} style={styles.backButton}>
+          <Text style={styles.backButtonText}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Infernus Gym Shop</Text>
+      </View>
       <Image
-        source={require('../../assets/coffee-cup-splash.png')}
-        style={styles.image}
+        source={require('../../assets/gym-background.jpg')} 
+        style={styles.bannerImage}
       />
-      <Text style={styles.title}>Bienvenid@</Text>
-      <Text style={styles.subtitle}>
-        { /*correo ? correo : 'No hay correo para mostrar'*/}
-        {nombre ? nombre : 'No hay Nombre para mostrar'}
+      <Text style={styles.bannerText}>
+        "Infernus Gym Shop es tu destino para encontrar todo lo necesario para potenciar tu rutina de entrenamiento. Descubre nuestra amplia selección que incluye mancuernas, pesas, ropa deportiva, suplementos nutricionales y accesorios así como equipamiento para entrenar en casa. Nuestros productos de alta calidad están diseñados para mejorar tu rendimiento y ayudarte a alcanzar tus metas fitness. ¡Explora el catálogo y lleva tu entrenamiento al siguiente nivel con Infernus Gym Shop!"
       </Text>
-      <Buttons
-        textoBoton='Cerrar Sesión'
-        accionBoton={handleLogout}
-      />
-
-      <Buttons
-        textoBoton='Ver Productos'
-        accionBoton={irActualizar}
-      />
-      <Buttons
-        textoBoton='Editar Usuario'
-        accionBoton={EditUser}
-      />
-    </View>
+      <View style={styles.offersSection}>
+        <Text style={styles.offersHeader}>Ofertas</Text>
+        <TouchableOpacity onPress={() => { /* acción para Ver todas */ }}>
+          <Text style={styles.viewAllText}>Ver todas</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.offerCardsContainer}>
+        <View style={styles.offerCard}>
+          <Image
+            source={require('../../assets/offer1.png')} 
+            style={styles.offerImage}
+          />
+          <Text style={styles.offerTitle}>Obtén 50% de descuento en suplementos</Text>
+          <Text style={styles.offerSubtitle}>Termina en 24 horas</Text>
+          <Text style={styles.offerDiscount}>50% OFF</Text>
+        </View>
+        <View style={styles.offerCard}>
+          <Image
+            source={require('../../assets/offer2.png')} 
+            style={styles.offerImage}
+          />
+          <Text style={styles.offerTitle}>Solo hoy 20% de descuento en nuestras pesas</Text>
+          <Text style={styles.offerSubtitle}>Termina en 24 horas</Text>
+          <Text style={styles.offerDiscount}>20% OFF</Text>
+        </View>
+        <View style={styles.offerCard}>
+          <Image
+            source={require('../../assets/offer3.png')} 
+            style={styles.offerImage}
+          />
+          <Text style={styles.offerTitle}>Oferta especial: 60% de descuento</Text>
+          <Text style={styles.offerSubtitle}>Termina en 24 horas</Text>
+          <Text style={styles.offerDiscount}>60% OFF</Text>
+        </View>
+        <View style={styles.offerCard}>
+          <Image
+            source={require('../../assets/offer4.png')} 
+            style={styles.offerImage}
+          />
+          <Text style={styles.offerTitle}>Solo hoy 20% de descuento en ropa deportiva</Text>
+          <Text style={styles.offerSubtitle}>Termina en 24 horas</Text>
+          <Text style={styles.offerDiscount}>20% OFF</Text>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EAD8C0',
+    backgroundColor: '#FFD6D6',
+  },
+  header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    paddingTop: 20,
+    paddingHorizontal: 20,
   },
-  image: {
-    width: 100,
-    height: 100,
-    marginBottom: 10
+  backButton: {
+    marginRight: 20,
   },
-  button: {
-    borderWidth: 2,
-    borderColor: "black",
-    width: 100,
-    borderRadius: 10,
-    backgroundColor: "darkblue"
-  },
-  buttonText: {
-    textAlign: 'center',
-    color: "white"
-  },
-  title: {
+  backButtonText: {
     fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 5,
-    color: '#5C3D2E', // Brown color for the title
+    color: '#000',
   },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: '600',
+  headerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  bannerImage: {
+    width: '100%',
+    height: 200,
+  },
+  bannerText: {
+    padding: 20,
+    fontSize: 14,
+    color: '#000',
+    backgroundColor: '#FFC4C4',
     textAlign: 'center',
-    marginVertical: 5,
-    color: '#5C3D2E', // Brown color for the title
+  },
+  offersSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  offersHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  viewAllText: {
+    fontSize: 14,
+    color: '#00F',
+    textDecorationLine: 'underline',
+  },
+  offerCardsContainer: {
+    paddingHorizontal: 20,
+    marginTop: 10,
+  },
+  offerCard: {
+    backgroundColor: '#FFF',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  offerImage: {
+    width: '100%',
+    height: 100,
+    borderRadius: 10,
+  },
+  offerTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#000',
+    marginTop: 10,
+  },
+  offerSubtitle: {
+    fontSize: 12,
+    color: '#555',
+    marginTop: 5,
+  },
+  offerDiscount: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#FF0000',
+    marginTop: 5,
   },
 });
