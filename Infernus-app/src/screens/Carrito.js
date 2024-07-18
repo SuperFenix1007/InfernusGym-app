@@ -1,4 +1,3 @@
-// Importaciones necesarias
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, FlatList, Alert, TouchableOpacity, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
@@ -43,6 +42,11 @@ const Carrito = ({ navigation }) => {
   };
 
   const finalizarPedido = async () => {
+    if (dataDetalleCarrito.length === 0) {
+      Alert.alert('Error', 'No hay productos en el carrito para pagar.');
+      return;
+    }
+
     try {
       const response = await fetch(`${ip}/gym_infernus_website/api/services/public/pedido.php?action=finishOrder`, {
         method: 'GET',
@@ -98,19 +102,6 @@ const Carrito = ({ navigation }) => {
         getDetalleCarrito={getDetalleCarrito}
       />
 
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <Image
-            source={{ uri: 'https://img.icons8.com/ios-filled/50/000000/menu.png' }}
-            style={styles.menuIcon}
-          />
-        </TouchableOpacity>
-        <Image
-          source={{ uri: 'https://img.icons8.com/ios-filled/100/000000/shopping-cart.png' }}
-          style={styles.cartIcon}
-        />
-      </View>
-
       <Text style={styles.title}>Carrito de Compras</Text>
 
       {dataDetalleCarrito.length > 0 ? (
@@ -151,22 +142,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#EAD8C0',
     paddingTop: Constants.statusBarHeight,
     paddingHorizontal: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#EAD8C0',
-  },
-  menuIcon: {
-    width: 24,
-    height: 24,
-  },
-  cartIcon: {
-    width: 48,
-    height: 48,
   },
   title: {
     fontSize: 24,
@@ -230,5 +205,3 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 });
-
-

@@ -7,6 +7,8 @@ import { Platform } from 'react-native';
 import Productos from '../screens/Productos';
 import Home from '../screens/Home';
 import Carrito from '../screens/Carrito';
+import SignUp  from '../screens/SignUp';
+import UpdateUser from '../screens/UpdateUser';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,7 +34,16 @@ const TabNavigator = () => {
                         iconName = focused ? 'cafe' : 'cafe-outline';
                     } else if (route.name === 'Carrito') {
                         iconName = focused ? 'cart' : 'cart-outline';
+                    } else if (route.name === 'UpdateUser'){
+                       iconName = focused ? 'user' : 'update-outline';
                     }
+                    
+                            
+
+            
+                    
+            
+                    
                     return <Ionicons name={iconName} color={color} size={size} />;
                 },
             })}
@@ -52,6 +63,14 @@ const TabNavigator = () => {
                 component={Carrito}
                 options={{ title: 'Carrito' }}
             />
+
+            <Tab.Screen
+                name="UpdateUser"
+                component={UpdateUser}
+                options={{ title: 'Editar Usuario' }}
+            />
+
+
         </Tab.Navigator>
     );
 };
